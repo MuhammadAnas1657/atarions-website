@@ -1,0 +1,11 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+await page.goto('http://localhost:5173', { waitUntil: 'networkidle' });
+await page.locator('text=Client Voices').scrollIntoViewIfNeeded();
+await page.getByRole('button', { name: /View More Reviews/i }).click();
+await page.waitForTimeout(600);
+await page.locator('text=Northline Logistics').scrollIntoViewIfNeeded();
+await page.waitForTimeout(600);
+await page.screenshot({ path: '/tmp/testimonials-expanded.png' });
+await browser.close();

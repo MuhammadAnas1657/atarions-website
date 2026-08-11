@@ -1,14 +1,24 @@
+import { Link } from "react-router-dom";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { FacebookIcon, LinkedinIcon, GithubIcon, YoutubeIcon } from "../components/SocialIcons";
 import NetworkCanvas from "../components/NetworkCanvas";
+import { COMPANY_SOCIALS } from "../data/socialLinks";
 
-const LINKS = ["Home", "About", "Services", "Projects", "Team", "Blogs", "Contact"];
-const SOCIALS = [
-  { Icon: FacebookIcon, label: "Facebook" },
-  { Icon: LinkedinIcon, label: "LinkedIn" },
-  { Icon: GithubIcon, label: "GitHub" },
-  { Icon: YoutubeIcon, label: "YouTube" },
+const LINKS = [
+  { label: "Home", to: "/#home" },
+  { label: "About", to: "/#about" },
+  { label: "Services", to: "/#services" },
+  { label: "Projects", to: "/#projects" },
+  { label: "Team", to: "/#team" },
+  { label: "Blogs", to: "/blog" },
+  { label: "Contact", to: "/#contact" },
 ];
+const SOCIALS = [
+  { Icon: FacebookIcon, label: "Facebook", href: COMPANY_SOCIALS.facebook },
+  { Icon: LinkedinIcon, label: "LinkedIn", href: COMPANY_SOCIALS.linkedin },
+  { Icon: GithubIcon, label: "GitHub", href: COMPANY_SOCIALS.github },
+  { Icon: YoutubeIcon, label: "YouTube", href: COMPANY_SOCIALS.youtube },
+].filter((s) => s.href);
 
 export default function Footer() {
   return (
@@ -20,17 +30,19 @@ export default function Footer() {
       />
       <div className="relative max-w-7xl mx-auto px-6 lg:px-10 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
-          <a href="#home" className="font-display text-xl font-semibold text-cloud">
-            Atarion<span className="text-pulse">.</span>
-          </a>
+          <Link to="/" className="flex items-center">
+            <img src="/logo-full-trimmed.png" alt="Atarion Solutions" className="h-10 w-auto" />
+          </Link>
           <p className="mt-4 text-sm text-cloud-dim leading-relaxed max-w-xs">
             Solving problems with customer prioritization.
           </p>
           <div className="mt-6 flex items-center gap-3">
-            {SOCIALS.map(({ Icon, label }) => (
+            {SOCIALS.map(({ Icon, label, href }) => (
               <a
                 key={label}
-                href="#"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
                 className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-cloud-dim transition-colors duration-200 hover:text-pulse hover:border-pulse/40"
               >
@@ -43,11 +55,11 @@ export default function Footer() {
         <div>
           <h4 className="font-display font-semibold text-cloud mb-4">Navigate</h4>
           <ul className="space-y-2.5 text-sm text-cloud-dim">
-            {LINKS.map((l) => (
-              <li key={l}>
-                <a href={`#${l.toLowerCase()}`} className="hover:text-pulse transition-colors">
-                  {l}
-                </a>
+            {LINKS.map(({ label, to }) => (
+              <li key={label}>
+                <Link to={to} className="hover:text-pulse transition-colors">
+                  {label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -58,9 +70,9 @@ export default function Footer() {
           <ul className="space-y-2.5 text-sm text-cloud-dim">
             {["Web Development", "AI / Machine Learning", "Data Science", "Software Development"].map((s) => (
               <li key={s}>
-                <a href="#services" className="hover:text-pulse transition-colors">
+                <Link to="/#services" className="hover:text-pulse transition-colors">
                   {s}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

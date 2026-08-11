@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-const LINKS = ["Home", "About", "Services", "Projects", "Team", "Blogs", "Contact"];
+const LINKS = [
+  { label: "Home", to: "/#home" },
+  { label: "About", to: "/#about" },
+  { label: "Services", to: "/#services" },
+  { label: "Projects", to: "/#projects" },
+  { label: "Team", to: "/#team" },
+  { label: "Blogs", to: "/blog" },
+  { label: "Contact", to: "/#contact" },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -27,29 +36,29 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10 h-18 py-4">
-        <a href="#home" className="font-display text-xl font-semibold tracking-tight text-cloud">
-          Atarion<span className="text-pulse">.</span>
-        </a>
+        <Link to="/" className="flex items-center">
+          <img src="/logo-full-trimmed.png" alt="Atarion Solutions" className="h-9 w-auto" />
+        </Link>
 
         <ul className="hidden md:flex items-center gap-8 font-medium text-sm text-cloud-dim">
-          {LINKS.map((link) => (
-            <li key={link}>
-              <a
-                href={`#${link.toLowerCase()}`}
+          {LINKS.map(({ label, to }) => (
+            <li key={label}>
+              <Link
+                to={to}
                 className="relative py-1 transition-colors hover:text-cloud after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-pulse after:transition-all after:duration-300 hover:after:w-full"
               >
-                {link}
-              </a>
+                {label}
+              </Link>
             </li>
           ))}
         </ul>
 
-        <a
-          href="#contact"
+        <Link
+          to="/#contact"
           className="hidden md:inline-flex items-center rounded-full bg-electric px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_0_0_rgba(108,79,240,0.5)] transition-all duration-300 hover:shadow-[0_0_24px_2px_rgba(108,79,240,0.5)] hover:bg-electric/90"
         >
           Get in Touch
-        </a>
+        </Link>
 
         <button
           className="md:hidden text-cloud"
@@ -70,15 +79,15 @@ export default function Navbar() {
             className="md:hidden overflow-hidden bg-void/95 backdrop-blur-lg border-b border-white/5"
           >
             <ul className="flex flex-col gap-1 px-6 py-4">
-              {LINKS.map((link) => (
-                <li key={link}>
-                  <a
-                    href={`#${link.toLowerCase()}`}
+              {LINKS.map(({ label, to }) => (
+                <li key={label}>
+                  <Link
+                    to={to}
                     onClick={() => setOpen(false)}
                     className="block py-2.5 text-cloud-dim hover:text-cloud transition-colors"
                   >
-                    {link}
-                  </a>
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>

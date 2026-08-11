@@ -14,6 +14,7 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
     let width, height, nodes, raf;
     const pointer = { x: -9999, y: -9999 };
     let scrollShift = 0;
+    let isVisible = true;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
@@ -94,7 +95,7 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
         ctx.fill();
       }
 
-      raf = requestAnimationFrame(draw);
+      raf = isVisible ? requestAnimationFrame(draw) : null;
     }
 
     resize();
@@ -105,6 +106,20 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
       canvas.addEventListener("pointerleave", onPointerLeave);
     }
 
+    // Pause the draw loop entirely while the canvas is scrolled off-screen —
+    // this runs on both Hero and Footer, so an always-on rAF loop means two
+    // particle simulations burning CPU for the whole session even unseen.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !reduced && !raf) {
+          raf = requestAnimationFrame(draw);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     if (!reduced) {
       raf = requestAnimationFrame(draw);
     } else {
@@ -113,6 +128,7 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
 
     return () => {
       cancelAnimationFrame(raf);
+      observer.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
       if (interactive) {

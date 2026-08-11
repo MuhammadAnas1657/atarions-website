@@ -1,60 +1,60 @@
 import { motion } from "framer-motion";
 import Reveal from "../components/Reveal";
-import { LinkedinIcon, TwitterIcon } from "../components/SocialIcons";
-import anasPhoto from "../assets/team/anas.png";
-import hammadPhoto from "../assets/team/hammad.png";
+import { LinkedinIcon, TwitterIcon, GithubIcon } from "../components/SocialIcons";
+import anasPhoto from "../assets/team/anas.jpg";
+import hammadPhoto from "../assets/team/hammad.jpg";
+import memberDefaultPhoto from "../assets/team/member_default.jpg";
+import memberDefaultFemalePhoto from "../assets/team/member_default_female.jpg";
 
-// Clean placeholder headshots (gradient + silhouette) as inline SVG data
-// URIs — no watermarks, self-contained. Each `photo` value is a plain
-// <img src>, so real headshots can be dropped in later without touching
-// the markup.
-function placeholderPhoto(seed, from, to) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
-    <defs>
-      <linearGradient id="g${seed}" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="${from}"/>
-        <stop offset="100%" stop-color="${to}"/>
-      </linearGradient>
-    </defs>
-    <rect width="240" height="240" fill="url(#g${seed})"/>
-    <circle cx="120" cy="95" r="42" fill="rgba(255,255,255,0.55)"/>
-    <path d="M40 240c0-52 36-84 80-84s80 32 80 84" fill="rgba(255,255,255,0.55)"/>
-  </svg>`;
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
-}
-
+// Per-member social links. Fill in the real profile URLs — leave "" to
+// hide that icon (the card only renders icons that have a URL).
 const TEAM = [
   {
     name: "Anas Qaiser",
     role: "CEO",
     bio: "Leads Atarion's vision and overall company direction.",
     photo: anasPhoto,
+    photoPosition: "center 20%",
+    linkedin: "https://www.linkedin.com/in/muhammadanas083",
+    github: "https://github.com/MuhammadAnas1657",
+    twitter: "",
   },
   {
     name: "Hammad Ali",
     role: "CTO",
     bio: "Oversees the technical architecture and engineering strategy.",
     photo: hammadPhoto,
+    linkedin: "",
+    twitter: "",
   },
   {
     name: "Rabia Anwar",
     role: "Frontend Developer",
     bio: "Builds the interfaces clients interact with every day.",
-    photo: placeholderPhoto(3, "#6c4ff0", "#00e5c7"),
+    photo: memberDefaultFemalePhoto,
+    linkedin: "",
+    twitter: "",
   },
   {
     name: "Shahrina Khan",
     role: "Backend Developer",
     bio: "Builds the server-side systems that power our products.",
-    photo: placeholderPhoto(4, "#3d2c8d", "#00e5c7"),
+    photo: memberDefaultFemalePhoto,
+    linkedin: "",
+    twitter: "",
   },
   {
     name: "Huzaifa Jayyad",
     role: "Application Developer",
     bio: "Builds and ships cross-platform application features.",
-    photo: placeholderPhoto(5, "#00e5c7", "#6c4ff0"),
+    photo: memberDefaultPhoto,
+    linkedin: "",
+    twitter: "",
   },
 ];
+
+const LEADERSHIP = TEAM.slice(0, 2);
+const REST = TEAM.slice(2);
 
 const gridContainer = {
   hidden: {},
@@ -64,6 +64,71 @@ const cardVariant = {
   hidden: { opacity: 0, y: 28 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
 };
+
+function TeamCard({ name, role, bio, photo, photoPosition = "center", photoScale = 1, linkedin, twitter, github }) {
+  const socials = [
+    { Icon: LinkedinIcon, label: "LinkedIn", href: linkedin, tone: "electric" },
+    { Icon: TwitterIcon, label: "Twitter", href: twitter, tone: "pulse" },
+    { Icon: GithubIcon, label: "GitHub", href: github, tone: "electric" },
+  ].filter((s) => s.href);
+
+  return (
+    <motion.div
+      variants={cardVariant}
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      className="group rounded-2xl overflow-hidden border border-white/10 bg-void transition-shadow duration-300 hover:shadow-[0_20px_50px_-15px_rgba(108,79,240,0.4)]"
+    >
+      <div className="relative h-32 sm:h-36 mx-4 mt-4 bg-void">
+        <div
+          className="relative w-full h-full overflow-hidden bg-gradient-to-br from-electric to-pulse shadow-lg"
+          style={{ clipPath: "url(#team-photo-clip)" }}
+        >
+          <img
+            src={photo}
+            alt={name}
+            style={{
+              objectPosition: photoPosition,
+              "--base-scale": photoScale,
+              "--hover-scale": photoScale * 1.1,
+            }}
+            className="absolute inset-0 w-full h-full object-cover scale-[var(--base-scale)] transition-transform duration-500 ease-out group-hover:scale-[var(--hover-scale)]"
+          />
+        </div>
+      </div>
+      <div className="p-6">
+        <p className="text-[11px] font-semibold tracking-widest text-cloud-dim uppercase">
+          {role}
+        </p>
+        <h3 className="mt-1 font-display text-lg font-bold text-pulse">
+          {name}
+        </h3>
+        <p className="mt-3 text-sm text-cloud-dim leading-relaxed">{bio}</p>
+
+        {socials.length > 0 && (
+          <div className="mt-5 flex items-center gap-2">
+            {socials.map(({ Icon, label, href, tone }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${name} on ${label}`}
+                className={
+                  tone === "electric"
+                    ? "w-8 h-8 rounded-full bg-electric/10 border border-electric/30 flex items-center justify-center text-electric transition-colors duration-200 hover:bg-electric hover:text-white"
+                    : "w-8 h-8 rounded-full bg-pulse/10 border border-pulse/30 flex items-center justify-center text-pulse transition-colors duration-200 hover:bg-pulse hover:text-void"
+                }
+              >
+                <Icon width={14} height={14} />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Team() {
   return (
@@ -93,55 +158,22 @@ export default function Team() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.15 }}
-          className="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="mt-16 grid sm:grid-cols-2 max-w-xl mx-auto gap-6"
         >
-          {TEAM.map(({ name, role, bio, photo }) => (
-            <motion.div
-              key={name}
-              variants={cardVariant}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="group rounded-2xl overflow-hidden border border-white/10 bg-void transition-shadow duration-300 hover:shadow-[0_20px_50px_-15px_rgba(108,79,240,0.4)]"
-            >
-              <div className="relative h-32 sm:h-36 mx-4 mt-4 bg-void">
-                <div
-                  className="relative w-full h-full overflow-hidden bg-gradient-to-br from-electric to-pulse shadow-lg"
-                  style={{ clipPath: "url(#team-photo-clip)" }}
-                >
-                  <img
-                    src={photo}
-                    alt={name}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                  />
-                </div>
-              </div>
-              <div className="p-6">
-                <p className="text-[11px] font-semibold tracking-widest text-cloud-dim uppercase">
-                  {role}
-                </p>
-                <h3 className="mt-1 font-display text-lg font-bold text-pulse">
-                  {name}
-                </h3>
-                <p className="mt-3 text-sm text-cloud-dim leading-relaxed">{bio}</p>
+          {LEADERSHIP.map((member) => (
+            <TeamCard key={member.name} {...member} />
+          ))}
+        </motion.div>
 
-                <div className="mt-5 flex items-center gap-2">
-                  <a
-                    href="#"
-                    aria-label={`${name} on LinkedIn`}
-                    className="w-8 h-8 rounded-full bg-electric/10 border border-electric/30 flex items-center justify-center text-electric transition-colors duration-200 hover:bg-electric hover:text-white"
-                  >
-                    <LinkedinIcon width={14} height={14} />
-                  </a>
-                  <a
-                    href="#"
-                    aria-label={`${name} on Twitter`}
-                    className="w-8 h-8 rounded-full bg-pulse/10 border border-pulse/30 flex items-center justify-center text-pulse transition-colors duration-200 hover:bg-pulse hover:text-void"
-                  >
-                    <TwitterIcon width={14} height={14} />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
+        <motion.div
+          variants={gridContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+          className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {REST.map((member) => (
+            <TeamCard key={member.name} {...member} />
           ))}
         </motion.div>
       </div>

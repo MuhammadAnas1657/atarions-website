@@ -8,9 +8,11 @@ import { useEffect, useRef, useState } from "react";
 // the mount (and any layout it introduces) happens well before the user
 // scrolls there, keeping it invisible — animations still play exactly the
 // same once a section is on screen, they just don't run before that.
-export default function LazyMount({ children, rootMargin = "800px 0px" }) {
+export default function LazyMount({ children, rootMargin = "800px 0px", id }) {
   const ref = useRef(null);
-  const [shouldRender, setShouldRender] = useState(false);
+  const [shouldRender, setShouldRender] = useState(
+    () => !!id && typeof window !== "undefined" && window.location.hash === `#${id}`
+  );
 
   useEffect(() => {
     if (shouldRender) return;

@@ -25,11 +25,11 @@ const Testimonials = lazy(() => import("../features/Testimonials"));
 const Blog = lazy(() => import("../features/Blog"));
 const Contact = lazy(() => import("../features/Contact"));
 
-function DeferredSection({ children }) {
+function DeferredSection({ children, id }) {
   return (
     <SectionErrorBoundary>
       <Suspense fallback={null}>
-        <LazyMount>{children}</LazyMount>
+        <LazyMount id={id}>{children}</LazyMount>
       </Suspense>
     </SectionErrorBoundary>
   );
@@ -51,11 +51,11 @@ export default function Home() {
         <DeferredSection><Industries /></DeferredSection>
         <DeferredSection><Process /></DeferredSection>
         <DeferredSection><EcosystemWheel /></DeferredSection>
-        <DeferredSection><Projects /></DeferredSection>
-        <DeferredSection><Team /></DeferredSection>
+        <DeferredSection id="projects"><Projects /></DeferredSection>
+        <DeferredSection id="team"><Team /></DeferredSection>
         <DeferredSection><Testimonials /></DeferredSection>
         <DeferredSection><Blog /></DeferredSection>
-        <DeferredSection><Contact /></DeferredSection>
+        <DeferredSection id="contact"><Contact /></DeferredSection>
       </main>
       <Footer />
     </div>

@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import Reveal from "../components/Reveal";
 import { LinkedinIcon, TwitterIcon, GithubIcon } from "../components/SocialIcons";
-import anasPhoto from "../assets/team/anas.jpg";
-import hammadPhoto from "../assets/team/hammad.jpg";
-import memberDefaultPhoto from "../assets/team/member_default.jpg";
-import memberDefaultFemalePhoto from "../assets/team/member_default_female.jpg";
+import anasPhoto from "../assets/team/anas.webp";
+import hammadPhoto from "../assets/team/hammad.webp";
+import memberDefaultPhoto from "../assets/team/member_default.webp";
+import memberDefaultFemalePhoto from "../assets/team/member_default_female.webp";
 
 // Per-member social links. Fill in the real profile URLs — leave "" to
 // hide that icon (the card only renders icons that have a URL).
@@ -87,6 +87,8 @@ function TeamCard({ name, role, bio, photo, photoPosition = "center", photoScale
           <img
             src={photo}
             alt={name}
+            loading="lazy"
+            decoding="async"
             style={{
               objectPosition: photoPosition,
               "--base-scale": photoScale,

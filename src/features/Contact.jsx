@@ -8,13 +8,47 @@ import useReducedMotion from "../hooks/useReducedMotion";
 const FIELD_CLASS =
   "w-full rounded-xl border border-white/10 bg-void px-4 py-3 text-sm text-cloud placeholder:text-cloud-dim/60 outline-none transition-colors duration-200 focus:border-electric/60 focus:ring-2 focus:ring-electric/20";
 
+const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const reduced = useReducedMotion();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+
+    if (!WEB3FORMS_ACCESS_KEY) {
+      setError("Form is not configured yet. Please email us directly for now.");
+      return;
+    }
+
+    const form = e.target;
+    const formData = new FormData(form);
+    formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+    formData.append("subject", "New inquiry from atarionsolutions.com");
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: formData,
+      });
+      const result = await res.json();
+      if (result.success) {
+        setSubmitted(true);
+        form.reset();
+      } else {
+        setError("Something went wrong. Please try again or email us directly.");
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -63,6 +97,7 @@ export default function Contact() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-5">
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium text-cloud-dim mb-2">
                     First Name
@@ -102,14 +137,18 @@ export default function Contact() {
                 </div>
 
                 <div className="sm:col-span-2">
+                  {error && (
+                    <p className="mb-3 text-sm text-red-400" role="alert">{error}</p>
+                  )}
                   <motion.button
                     type="submit"
+                    disabled={submitting}
                     whileTap={{ scale: 0.94 }}
                     whileHover={{ scale: 1.015 }}
                     transition={{ duration: 0.2 }}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-electric px-6 py-3.5 text-sm font-semibold text-white transition-shadow duration-300 hover:shadow-[0_0_28px_4px_rgba(108,79,240,0.4)]"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-electric px-6 py-3.5 text-sm font-semibold text-white transition-shadow duration-300 hover:shadow-[0_0_28px_4px_rgba(108,79,240,0.4)] disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Submit
+                    {submitting ? "Sending..." : "Submit"}
                     <Send size={16} />
                   </motion.button>
                 </div>

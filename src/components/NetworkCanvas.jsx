@@ -15,6 +15,7 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
     const pointer = { x: -9999, y: -9999 };
     let scrollShift = 0;
     let isVisible = true;
+    let isTabVisible = !document.hidden;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
@@ -95,7 +96,7 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
         ctx.fill();
       }
 
-      raf = isVisible ? requestAnimationFrame(draw) : null;
+      raf = isVisible && isTabVisible ? requestAnimationFrame(draw) : null;
     }
 
     resize();
@@ -112,13 +113,21 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
-        if (isVisible && !reduced && !raf) {
+        if (isVisible && isTabVisible && !reduced && !raf) {
           raf = requestAnimationFrame(draw);
         }
       },
       { threshold: 0 }
     );
     observer.observe(canvas);
+
+    function onVisibilityChange() {
+      isTabVisible = !document.hidden;
+      if (isTabVisible && isVisible && !reduced && !raf) {
+        raf = requestAnimationFrame(draw);
+      }
+    }
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     if (!reduced) {
       raf = requestAnimationFrame(draw);
@@ -129,6 +138,7 @@ export default function NetworkCanvas({ className = "", density = 0.00009, inter
     return () => {
       cancelAnimationFrame(raf);
       observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
       if (interactive) {

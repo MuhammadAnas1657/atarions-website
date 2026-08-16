@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Reveal from "../components/Reveal";
 import AmbientBlobs from "../components/AmbientBlobs";
+import TiltCard from "../components/TiltCard";
 import useReducedMotion from "../hooks/useReducedMotion";
 
 const PROJECTS = [
@@ -55,35 +56,30 @@ export default function Projects() {
           className="mt-16 grid md:grid-cols-3 gap-6"
         >
           {PROJECTS.map(({ title, tag, gradient }, i) => (
-            <motion.a
-              href="#contact"
-              key={title}
-              variants={cardVariant}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="group rounded-3xl border border-white/10 bg-cosmos overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_55px_-15px_rgba(0,229,199,0.35)] hover:border-pulse/30"
-            >
-              <div className={`h-44 bg-gradient-to-br ${gradient} relative overflow-hidden`}>
-                <motion.div
-                  animate={
-                    reduced
-                      ? {}
-                      : { backgroundPosition: ["0px 0px", "32px 32px"] }
-                  }
-                  transition={{ duration: 7, repeat: Infinity, ease: "linear", delay: i * 0.4 }}
-                  className="absolute inset-0 opacity-40 [background-image:radial-gradient(rgba(255,255,255,0.25)_1px,transparent_1px)] [background-size:16px_16px]"
-                />
-              </div>
-              <div className="p-6 flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold tracking-widest text-pulse uppercase mb-1">{tag}</p>
-                  <h3 className="font-display text-lg font-semibold text-cloud">{title}</h3>
+            <motion.a href="#contact" key={title} variants={cardVariant} className="block h-full">
+              <TiltCard className="group rounded-3xl border border-white/10 bg-cosmos overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_55px_-15px_rgba(0,229,199,0.35)] hover:border-pulse/30">
+                <div className={`h-44 bg-gradient-to-br ${gradient} relative overflow-hidden`}>
+                  <motion.div
+                    animate={
+                      reduced
+                        ? {}
+                        : { backgroundPosition: ["0px 0px", "32px 32px"] }
+                    }
+                    transition={{ duration: 7, repeat: Infinity, ease: "linear", delay: i * 0.4 }}
+                    className="absolute inset-0 opacity-40 [background-image:radial-gradient(rgba(255,255,255,0.25)_1px,transparent_1px)] [background-size:16px_16px]"
+                  />
                 </div>
-                <ArrowUpRight
-                  size={20}
-                  className="text-cloud-dim transition-all duration-300 group-hover:text-pulse group-hover:translate-x-1 group-hover:-translate-y-1"
-                />
-              </div>
+                <div className="p-6 flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold tracking-widest text-pulse uppercase mb-1">{tag}</p>
+                    <h3 className="font-display text-lg font-semibold text-cloud">{title}</h3>
+                  </div>
+                  <ArrowUpRight
+                    size={20}
+                    className="text-cloud-dim transition-all duration-300 group-hover:text-pulse group-hover:translate-x-1 group-hover:-translate-y-1"
+                  />
+                </div>
+              </TiltCard>
             </motion.a>
           ))}
         </motion.div>

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Quote, ChevronDown } from "lucide-react";
 import Reveal from "../components/Reveal";
 import AmbientBlobs from "../components/AmbientBlobs";
+import TiltCard from "../components/TiltCard";
 import useReducedMotion from "../hooks/useReducedMotion";
 
 const TESTIMONIALS = [
@@ -81,31 +82,29 @@ export default function Testimonials() {
           className="mt-16 grid md:grid-cols-3 gap-6"
         >
           {visible.map(({ quote, name, role }, i) => (
-            <motion.figure
-              key={name}
-              variants={cardVariant}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative rounded-3xl border border-white/10 bg-cosmos p-8 flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_55px_-15px_rgba(0,229,199,0.3)] hover:border-pulse/30"
-            >
-              <motion.div
-                animate={
-                  reduced
-                    ? {}
-                    : { rotate: [0, -8, 8, 0], scale: [1, 1.08, 1] }
-                }
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-              >
-                <Quote className="text-electric mb-5" size={28} strokeWidth={1.5} />
-              </motion.div>
-              <blockquote className="text-cloud-dim leading-relaxed flex-1">
-                &ldquo;{quote}&rdquo;
-              </blockquote>
-              <figcaption className="mt-6 pt-6 border-t border-white/10">
-                <p className="font-display font-semibold text-cloud">{name}</p>
-                <p className="text-sm text-cloud-dim">{role}</p>
-              </figcaption>
-            </motion.figure>
+            <motion.div key={name} variants={cardVariant} className="h-full">
+              <TiltCard className="relative rounded-3xl border border-white/10 bg-cosmos overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_55px_-15px_rgba(0,229,199,0.3)] hover:border-pulse/30">
+                <figure className="relative h-full p-8 flex flex-col">
+                  <motion.div
+                    animate={
+                      reduced
+                        ? {}
+                        : { rotate: [0, -8, 8, 0], scale: [1, 1.08, 1] }
+                    }
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+                  >
+                    <Quote className="text-electric mb-5" size={28} strokeWidth={1.5} />
+                  </motion.div>
+                  <blockquote className="text-cloud-dim leading-relaxed flex-1">
+                    &ldquo;{quote}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-6 pt-6 border-t border-white/10">
+                    <p className="font-display font-semibold text-cloud">{name}</p>
+                    <p className="text-sm text-cloud-dim">{role}</p>
+                  </figcaption>
+                </figure>
+              </TiltCard>
+            </motion.div>
           ))}
         </motion.div>
 

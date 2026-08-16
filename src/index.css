@@ -76,6 +76,11 @@ body {
   border-radius: 999px;
 }
 
+html.glass-cursor-active,
+html.glass-cursor-active * {
+  cursor: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Reveal from "../components/Reveal";
+import TiltCard from "../components/TiltCard";
 import { LinkedinIcon, TwitterIcon, GithubIcon } from "../components/SocialIcons";
 import anasPhoto from "../assets/team/anas.webp";
 import hammadPhoto from "../assets/team/hammad.webp";
@@ -73,61 +74,58 @@ function TeamCard({ name, role, bio, photo, photoPosition = "center", photoScale
   ].filter((s) => s.href);
 
   return (
-    <motion.div
-      variants={cardVariant}
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="group rounded-2xl overflow-hidden border border-white/10 bg-void transition-shadow duration-300 hover:shadow-[0_20px_50px_-15px_rgba(108,79,240,0.4)]"
-    >
-      <div className="relative h-32 sm:h-36 mx-4 mt-4 bg-void">
-        <div
-          className="relative w-full h-full overflow-hidden bg-gradient-to-br from-electric to-pulse shadow-lg"
-          style={{ clipPath: "url(#team-photo-clip)" }}
-        >
-          <img
-            src={photo}
-            alt={name}
-            loading="lazy"
-            decoding="async"
-            style={{
-              objectPosition: photoPosition,
-              "--base-scale": photoScale,
-              "--hover-scale": photoScale * 1.1,
-            }}
-            className="absolute inset-0 w-full h-full object-cover scale-[var(--base-scale)] transition-transform duration-500 ease-out group-hover:scale-[var(--hover-scale)]"
-          />
-        </div>
-      </div>
-      <div className="p-6">
-        <p className="text-[11px] font-semibold tracking-widest text-cloud-dim uppercase">
-          {role}
-        </p>
-        <h3 className="mt-1 font-display text-lg font-bold text-pulse">
-          {name}
-        </h3>
-        <p className="mt-3 text-sm text-cloud-dim leading-relaxed">{bio}</p>
-
-        {socials.length > 0 && (
-          <div className="mt-5 flex items-center gap-2">
-            {socials.map(({ Icon, label, href, tone }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${name} on ${label}`}
-                className={
-                  tone === "electric"
-                    ? "w-8 h-8 rounded-full bg-electric/10 border border-electric/30 flex items-center justify-center text-electric transition-colors duration-200 hover:bg-electric hover:text-white"
-                    : "w-8 h-8 rounded-full bg-pulse/10 border border-pulse/30 flex items-center justify-center text-pulse transition-colors duration-200 hover:bg-pulse hover:text-void"
-                }
-              >
-                <Icon width={14} height={14} />
-              </a>
-            ))}
+    <motion.div variants={cardVariant} className="h-full">
+      <TiltCard className="group rounded-2xl overflow-hidden border border-white/10 bg-void transition-shadow duration-300 hover:shadow-[0_20px_50px_-15px_rgba(108,79,240,0.4)]">
+        <div className="relative h-32 sm:h-36 mx-4 mt-4 bg-void">
+          <div
+            className="relative w-full h-full overflow-hidden bg-gradient-to-br from-electric to-pulse shadow-lg"
+            style={{ clipPath: "url(#team-photo-clip)" }}
+          >
+            <img
+              src={photo}
+              alt={name}
+              loading="lazy"
+              decoding="async"
+              style={{
+                objectPosition: photoPosition,
+                "--base-scale": photoScale,
+                "--hover-scale": photoScale * 1.1,
+              }}
+              className="absolute inset-0 w-full h-full object-cover scale-[var(--base-scale)] transition-transform duration-500 ease-out group-hover:scale-[var(--hover-scale)]"
+            />
           </div>
-        )}
-      </div>
+        </div>
+        <div className="p-6">
+          <p className="text-[11px] font-semibold tracking-widest text-cloud-dim uppercase">
+            {role}
+          </p>
+          <h3 className="mt-1 font-display text-lg font-bold text-pulse">
+            {name}
+          </h3>
+          <p className="mt-3 text-sm text-cloud-dim leading-relaxed">{bio}</p>
+
+          {socials.length > 0 && (
+            <div className="mt-5 flex items-center gap-2">
+              {socials.map(({ Icon, label, href, tone }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${name} on ${label}`}
+                  className={
+                    tone === "electric"
+                      ? "w-8 h-8 rounded-full bg-electric/10 border border-electric/30 flex items-center justify-center text-electric transition-colors duration-200 hover:bg-electric hover:text-white"
+                      : "w-8 h-8 rounded-full bg-pulse/10 border border-pulse/30 flex items-center justify-center text-pulse transition-colors duration-200 hover:bg-pulse hover:text-void"
+                  }
+                >
+                  <Icon width={14} height={14} />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </TiltCard>
     </motion.div>
   );
 }

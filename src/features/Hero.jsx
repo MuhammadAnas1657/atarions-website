@@ -1,8 +1,10 @@
-import { useId } from "react";
+import { lazy, Suspense, useId } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import NetworkCanvas from "../components/NetworkCanvas";
 import useReducedMotion from "../hooks/useReducedMotion";
+
+const HeroScene = lazy(() => import("../components/three/HeroScene"));
 
 const container = {
   hidden: {},
@@ -143,6 +145,14 @@ export default function Hero() {
         }}
       />
       <NetworkCanvas className="absolute inset-0 w-full h-full" />
+
+      {!reduced && (
+        <div className="hidden lg:block absolute top-0 right-0 w-[58%] h-full [mask-image:linear-gradient(to_right,transparent,black_22%,black_88%,transparent),linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] [mask-composite:intersect]">
+          <Suspense fallback={null}>
+            <HeroScene />
+          </Suspense>
+        </div>
+      )}
 
       <div className="absolute inset-0">
         {SHAPES.map((shape, i) => (

@@ -289,6 +289,8 @@ export default function EcosystemWheel() {
                 key={service.id}
                 variants={wheelItemVariants}
                 onClick={() => setActiveId(service.id)}
+                onMouseEnter={() => setActiveId(service.id)}
+                onFocus={() => setActiveId(service.id)}
                 aria-pressed={isActive}
                 aria-label={service.name}
                 className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 group focus:outline-none"
